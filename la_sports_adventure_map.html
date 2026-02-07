@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Fall LA Sports Adventure Map</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- Leaflet CSS -->
+  <link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+    crossorigin=""
+  />
+
+  <style>
+    html, body {
+      height: 100%;
+      margin: 0;
+    }
+    #map {
+      width: 100%;
+      height: 100vh;
+    }
+    .popup-title {
+      font-weight: bold;
+      margin-bottom: 4px;
+      display: block;
+    }
+    .popup-sub {
+      font-size: 0.9em;
+      color: #555;
+    }
+  </style>
+</head>
+<body>
+  <div id="map"></div>
+
+  <!-- Leaflet JS -->
+  <script
+    src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+    integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+    crossorigin=""
+  ></script>
+
+  <script>
+    // Center roughly between Pasadena and DTLA
+    const map = L.map('map').setView([34.08, -118.27], 11);
+
+    // OpenStreetMap tile layer
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 19,
+      attribution: '&copy; OpenStreetMap contributors'
+    }).addTo(map);
+
+    // Locations
+    const locations = [
+      {
+        name: 'Dodger Stadium',
+        coords: [34.0739, -118.2400],
+        desc: 'Giants @ Dodgers (Fri night anchor).'
+      },
+      {
+        name: 'Rose Bowl Stadium',
+        coords: [34.1613, -118.1676],
+        desc: 'UCLA vs Purdue (Sat night anchor).'
+      },
+      {
+        name: 'COSM Los Angeles',
+        coords: [33.9530, -118.3380],
+        desc: 'EPL + NFL immersive Sunday block.'
+      },
+      {
+        name: 'Griffith Observatory',
+        coords: [34.1184, -118.3004],
+        desc: 'Daytime views + short hike option.'
+      },
+      {
+        name: 'Courtyard Pasadena Old Town',
+        coords: [34.1478, -118.1445],
+        desc: 'Best-value gov rate base in Pasadena.'
+      },
+      {
+        name: 'Hollywood (TCL Chinese / El Capitan)',
+        coords: [34.1019, -118.3417],
+        desc: 'Movie night + classic Hollywood strip.'
+      },
+      {
+        name: 'DTLA / Ritz / LA Live',
+        coords: [34.0430, -118.2673],
+        desc: 'Luxury wildcard + Arts District access.'
+      },
+      {
+        name: 'LAX Airport',
+        coords: [33.9416, -118.4085],
+        desc: 'Arrival Thu, Mint red-eye home Mon.'
+      }
+    ];
+
+    // Add markers
+    locations.forEach(loc => {
+      L.marker(loc.coords)
+        .addTo(map)
+        .bindPopup(
+          `<span class="popup-title">${loc.name}</span>` +
+          `<span class="popup-sub">${loc.desc}</span>`
+        );
+    });
+
+    // Fit bounds to all markers
+    const bounds = L.latLngBounds(locations.map(l => l.coords));
+    map.fitBounds(bounds, { padding: [40, 40] });
+  </script>
+</body>
+</html>
